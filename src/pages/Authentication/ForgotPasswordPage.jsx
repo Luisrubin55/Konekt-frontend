@@ -36,7 +36,7 @@ function ForgotPasswordPage() {
             className='bg-white p-3 w-80'
             placeholder='Ingresa tu correo electronico'
             {...register("email", {
-              required:"Ingresa un token"
+              required:"Ingresa tu email"
             })}
           />
         </div>

@@ -35,9 +35,9 @@ function Header({user}) {
             <Popover className="relative">
               <PopoverButton>
                 <img
-                  src="/perfil.jpg"
+                 src={user?.profilePictureUrl ? user?.profilePictureUrl : "/perfil.jpg"}
                   alt="imagen perfil user"
-                  className="rounded-full w-10"
+                  className="w-10 h-10 overflow-hidden object-cover rounded-full"
                 />
               </PopoverButton>
               <PopoverPanel
@@ -48,9 +48,9 @@ function Header({user}) {
                 <div className="p-3">
                   <NavLink to={`/${user?.username}`} className="flex items-center gap-2 border-b-1 border-white pb-2">
                     <img
-                      src="/perfil.jpg"
+                      src={user?.profilePictureUrl ? user?.profilePictureUrl : "/perfil.jpg"}
                       alt="imagen perfil user"
-                      className="rounded-full w-10"
+                      className="w-10 h-10 overflow-hidden object-cover rounded-full"
                     />
                     <p className="text-white font-semibold text-xl">
                       {user?.name + " " + user?.paternalSurname}

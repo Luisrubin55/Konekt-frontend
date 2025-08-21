@@ -9,17 +9,17 @@ import {
 import { formatDate } from "../utils/utils";
 
 function PostCard({post}) {
-  const { content, author:{name, paternalSurname, username }, createdAt, urlImage } = post
+  const { content, author:{name, paternalSurname, username, profilePictureUrl }, createdAt, urlImage } = post
   
   return (
     <div className=" bg-gray-950 rounded-xl mt-10">
       <div className="flex justify-between px-3 pt-2">
         <div className="flex gap-2 items-center">
-          <div className="w-8">
+          <div className="w-10">
             <img
-              src="/perfil.jpg"
+              src={profilePictureUrl ? profilePictureUrl : "/perfil.jpg"}
               alt="image profile"
-              className="rounded-full w-12"
+              className="w-9 h-9 overflow-hidden object-cover rounded-full"
             />
           </div>
           <div className="space-y-1">
@@ -42,7 +42,7 @@ function PostCard({post}) {
       </div>
       <div className="mt-3">
         {urlImage ? (
-          <img src={urlImage} alt="imagen post" className="w-auto" />
+          <img src={urlImage} alt="imagen post" className="w-full" />
         ) : ''}
       </div>
       <div className="flex justify-around mt-3 p-2">

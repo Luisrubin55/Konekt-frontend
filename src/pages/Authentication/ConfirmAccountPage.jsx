@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "react-toastify"
 import { confirmTokenAccount } from "../../api/AuthAPI"
 
 
@@ -12,11 +13,11 @@ function ConfirmAccountPage() {
   const mutation = useMutation({
     mutationFn: confirmTokenAccount,
     onSuccess: (data) => {
-      console.log(data);
+      toast.success(data.message)
       navigate("/login")
     },
     onError: (error) => {
-      console.log(error);
+      toast.error(error.message)
     }
   })
 

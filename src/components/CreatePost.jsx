@@ -7,31 +7,31 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useMutation } from '@tanstack/react-query'
+import ModalImgPost from "./ModalImgPost";
+import { useState } from "react";
 
 function CreatePost() {
-  const initialValues = {
-    content: "",
-    author: {
-        id: 5,
-      }, 
-  };
 
-  const { register, handleSubmit, formState: { errors }} = useForm({ defaultValues:initialValues });
+  const [modal, setModal] = useState(false)
+  const { register, handleSubmit, formState: { errors }} = useForm();
 
   const mutation = useMutation({
     mutationFn: createPost,
-    onError: () => {
-
-    },
     onSuccess: (data) => {
       console.log(data);
-      
+    },
+    onError: (error) => {
+      console.log(error); 
     }
   })
 
   const handleForm = (data) => {
     mutation.mutateAsync(data)
   };
+
+  const newPostPhoto = () => {
+    setModal(true)
+  }
 
   return (
     <div className=" w-full border-2 border-sky-800 p-3 rounded-2xl">
@@ -58,10 +58,9 @@ function CreatePost() {
               <FaceSmileIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />
             </button>
             <div className="w-8">
-              <label htmlFor="fileInput" className="">
+              <button onClick={newPostPhoto} className="w-full">
                 <PhotoIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />
-              </label>
-              <input type="file" id="fileInput" className="hidden" />
+              </button>
             </div>
             <button className="w-8">
               <MapPinIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />
@@ -76,6 +75,7 @@ function CreatePost() {
           </div>
         </div>
       </form>
+      <ModalImgPost modal={modal} />
     </div>
   );
 }

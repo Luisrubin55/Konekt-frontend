@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { toast } from "react-toastify"
 import { registerUser } from '../../api/AuthAPI'
 
 function RegisterPage() {
@@ -11,10 +12,11 @@ function RegisterPage() {
     const {mutateAsync} = useMutation({
         mutationFn: registerUser,
         onSuccess: (data) => {
+            toast.success(data.message)
             navigate("/confirm-account")
         },
         onError: (error) => {
-            console.log(error);
+            toast.error(error.message)
         }
     })
 

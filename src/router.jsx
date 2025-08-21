@@ -7,19 +7,24 @@ import RegisterPage from "./pages/Authentication/RegisterPage";
 import ConfirmAccountPage from "./pages/Authentication/ConfirmAccountPage";
 import AuthLayout from "./layout/AuthLayout";
 import ForgotPasswordPage from "./pages/Authentication/ForgotPasswordPage";
+import ProfileLayout from "./layout/ProfileLayout";
+import ChangePasswordPage from "./pages/Authentication/ChangePasswordPage";
 
 function RouterApp() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route element={<ProfileLayout />}>
+          <Route path="/:username" element={<ProfilePage />} />
+        </Route>
         <Route element={<FeedLayout />}>
           <Route path="/" element={<HomePage />} index />
-          <Route path="/:username" element={<ProfilePage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/new-password/:token" element={<ChangePasswordPage />} />
           <Route path="/confirm-account" element={<ConfirmAccountPage />} />
         </Route>
       </Routes>

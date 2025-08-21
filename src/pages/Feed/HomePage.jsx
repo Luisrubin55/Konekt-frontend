@@ -8,10 +8,7 @@ function HomePage({user}) {
     queryKey: ["posts"],
     queryFn: getAllPost,
   });
-
-  console.log(user);
   
-
   return (
     <div className="flex gap-10 w-5xl">
       <div className="w-2xl">

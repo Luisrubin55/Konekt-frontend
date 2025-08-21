@@ -1,26 +1,27 @@
 import axios, { isAxiosError } from "axios";
-import api from "../lib/axios"
 
 export async function registerUser(formData) {
     try {
-        const url = "/user/register"
-        const { data } = await api.post(url, formData);
+        const url = "http://localhost:8081/api/auth/register"
+        const { data } = await axios.post(url, formData);
         return data
     } catch (error) {
-        console.log(error);
-        
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message)
+        }
     }
 }
 
 export async function login(formData) {
     try {
-        const url = "http://localhost:8080/login"
+        const url = "http://localhost:8081/api/auth/login"
         const { data } = await axios.post(url, formData);
+        console.log(data);
+
         const local = {
             token: data.token,
             email: data.username
         }
-        
         localStorage.setItem("AUTH_TOKEN", JSON.stringify(local))
         return data;
     } catch (error) {
@@ -30,11 +31,12 @@ export async function login(formData) {
     }
 }
 
-export async function getUserByEmail(email) {
+
+export async function confirmTokenAccount(formData) {
     try {
-        const url = `/user/${email}`
-        const { data } = await api.get(url)
-        return data;
+        const url = "http://localhost:8081/api/auth/validate-token"
+        const { data } = await axios.post(url, formData)
+        return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message)
@@ -42,23 +44,23 @@ export async function getUserByEmail(email) {
     }
 }
 
-export async function confirmTokenAccount(formData) {
+export async function searchAccount(formData) {
+
     try {
-        const url = "/user/validate-token"
-        const { data } = api.post(url, formData)
+        const url = "http://localhost:8081/api/auth/search-account"
+        const { data } = await axios.post(url, formData)
         return data
     } catch (error) {
-        
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message)
+        }
     }
 }
 
-export async function searchAccount(formData) {
-    console.log(formData);
-    
+export async function changePasswordAccount(formData) {
     try {
-        const url = "/user/search-account"
-        const { data } = await api.post(url, formData)
-        console.log(data);
+        const url = "http://localhost:8081/api/auth/new-password/" + formData.token;
+        const { data } = await axios.post(url, formData)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
