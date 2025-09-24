@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { createPost } from "../api/PostAPI";
+import { use, useEffect } from "react";
+import { createPost } from "../../api/PostAPI";
 import { useForm } from "react-hook-form";
 import {
   FaceSmileIcon,
@@ -7,8 +7,9 @@ import {
   PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { useMutation } from '@tanstack/react-query'
-import ModalImgPost from "./ModalImgPost";
+import ModalImgPost from "../ModalImgPost";
 import { useState } from "react";
+import useUser from "../../hooks/useUser";
 
 function CreatePost() {
 
@@ -18,7 +19,6 @@ function CreatePost() {
   const mutation = useMutation({
     mutationFn: createPost,
     onSuccess: (data) => {
-      console.log(data);
     },
     onError: (error) => {
       console.log(error); 
@@ -29,18 +29,20 @@ function CreatePost() {
     mutation.mutateAsync(data)
   };
 
+  const {data} = useUser()
+
   const newPostPhoto = () => {
     setModal(true)
   }
-
+  
   return (
     <div className=" w-full border-2 border-sky-800 p-3 rounded-2xl">
       <form onSubmit={handleSubmit(handleForm)}>
         <div className="flex gap-3">
           <img
-            src="/perfil.jpg"
-            alt="image profile"
-            className="rounded-full w-12"
+              src={data?.profilePictureUrl ? data?.profilePictureUrl : "/perfil.jpg"}
+              alt="image profile"
+              className="w-9 h-9 overflow-hidden object-cover rounded-full"
           />
           <input
             type="text"
@@ -50,6 +52,7 @@ function CreatePost() {
             {...register("content", {
               required: "Ingresa contenido",
             })}
+            autoComplete="off"
           />
         </div>
         <div className=" flex justify-between items-center mt-5">
@@ -75,7 +78,11 @@ function CreatePost() {
           </div>
         </div>
       </form>
-      <ModalImgPost modal={modal} />
+      <ModalImgPost 
+        modal={modal}
+        setModal={setModal}
+        user={data}
+      />
     </div>
   );
 }

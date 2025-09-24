@@ -12,6 +12,7 @@ function RegisterPage() {
     const {mutateAsync} = useMutation({
         mutationFn: registerUser,
         onSuccess: (data) => {
+            console.log(data)
             toast.success(data.message)
             navigate("/confirm-account")
         },

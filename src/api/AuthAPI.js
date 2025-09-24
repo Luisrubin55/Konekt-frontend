@@ -2,7 +2,7 @@ import axios, { isAxiosError } from "axios";
 
 export async function registerUser(formData) {
     try {
-        const url = "http://localhost:8081/api/auth/register"
+        const url = "http://localhost:8080/api/auth/register"
         const { data } = await axios.post(url, formData);
         return data
     } catch (error) {
@@ -14,7 +14,7 @@ export async function registerUser(formData) {
 
 export async function login(formData) {
     try {
-        const url = "http://localhost:8081/api/auth/login"
+        const url = "http://localhost:8080/api/auth/login"
         const { data } = await axios.post(url, formData);
         console.log(data);
 
@@ -34,7 +34,7 @@ export async function login(formData) {
 
 export async function confirmTokenAccount(formData) {
     try {
-        const url = "http://localhost:8081/api/auth/validate-token"
+        const url = "http://localhost:8080/api/auth/validate-account"
         const { data } = await axios.post(url, formData)
         return data
     } catch (error) {
@@ -47,7 +47,7 @@ export async function confirmTokenAccount(formData) {
 export async function searchAccount(formData) {
 
     try {
-        const url = "http://localhost:8081/api/auth/search-account"
+        const url = "http://localhost:8080/api/auth/search-account"
         const { data } = await axios.post(url, formData)
         return data
     } catch (error) {
@@ -59,7 +59,7 @@ export async function searchAccount(formData) {
 
 export async function changePasswordAccount(formData) {
     try {
-        const url = "http://localhost:8081/api/auth/new-password/" + formData.token;
+        const url = "http://localhost:8080/api/auth/new-password/" + formData.token;
         const { data } = await axios.post(url, formData)
         return data
     } catch (error) {
