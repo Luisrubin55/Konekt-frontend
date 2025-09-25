@@ -1,9 +1,19 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { FaceSmileIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import React, { useState, Fragment, useEffect } from "react";
+import {
+  FaceSmileIcon,
+  PhotoIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import PostImagesEditing from "../Images/PostImagesEditing";
 
-function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing }) {
+function ModalEditingPost({
+  modalPost,
+  setModalPost,
+  postEditing,
+  setPostEditing,
+}) {
   const defaultValues = {
     content: postEditing?.content || "",
   };
@@ -19,14 +29,14 @@ function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing
   }, [postEditing, reset]);
 
   const handleCllckCloseModal = () => {
-    setModalPost(false)
-    reset([])
-    setPostEditing([])
+    setModalPost(false);
+    reset([]);
+    setPostEditing([]);
   };
 
   const handleSubmitUpdatePost = (data) => {
     console.log(data);
-  }
+  };
 
   return (
     <>
@@ -71,36 +81,34 @@ function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing
                     </div>
                   </div>
                   <div>
-                    <form
-                      onSubmit={handleSubmit(handleSubmitUpdatePost)}
-                    >
-                      <div className="flex items-center justify-between mt-5 mb-5">
-                        <input
-                          className="w-full decoration-0 border-none outline-none p-2 text-xl text-white"
-                          type="text"
-                          {...register("content", {
-                            required: "Ingresa un comentario",
-                          })}
-                          placeholder="Escribe un comentario..."
+                    <form onSubmit={handleSubmit(handleSubmitUpdatePost)}>
+                      <div className="flex flex-col mt-5 mb-5 gap-0">
+                        <textarea
+                          rows="1"
+                          placeholder="¿Qué estás pensando?"
+                          className="w-full text-white p-3 rounded-lg resize-none overflow-hidden focus:outline-none"
                           autoComplete="off"
+                          {...register("content", {
+                            required: "Ingresa contenido",
+                            onChange: (e) => {
+                              e.target.style.height = "auto";
+                              e.target.style.height =
+                                e.target.scrollHeight + "px";
+                            },
+                          })}
                         />
-                        <div className="flex gap-3">
+                        <div className="flex justify-between">
                           <button type="button">
-                            <FaceSmileIcon className="w-5 text-white font-extrabold" />
+                            <PhotoIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
                           </button>
                           <button type="button">
-                            <PhotoIcon className="w-5 text-white font-extrabold" />
+                            <FaceSmileIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
                           </button>
                         </div>
                       </div>
                       {postEditing?.images
                         ? postEditing?.images.map((item) => (
-                            <img
-                              src={item.urlImage}
-                              alt="imagen post"
-                              className="w-full"
-                              key={item.id}
-                            />
+                            <PostImagesEditing item={item} key={item.id} />
                           ))
                         : ""}
                       <div className="mt-5">

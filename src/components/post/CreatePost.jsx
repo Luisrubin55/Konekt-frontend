@@ -10,15 +10,17 @@ import { useMutation } from '@tanstack/react-query'
 import ModalImgPost from "../ModalImgPost";
 import { useState } from "react";
 import useUser from "../../hooks/useUser";
+import { toast } from "react-toastify";
 
 function CreatePost() {
 
   const [modal, setModal] = useState(false)
-  const { register, handleSubmit, formState: { errors }} = useForm();
+  const { register, handleSubmit, formState: { errors }, reset} = useForm();
 
   const mutation = useMutation({
     mutationFn: createPost,
     onSuccess: (data) => {
+      toast.success("Publicación creada con éxito")
     },
     onError: (error) => {
       console.log(error); 
@@ -27,6 +29,7 @@ function CreatePost() {
 
   const handleForm = (data) => {
     mutation.mutateAsync(data)
+    reset({})
   };
 
   const {data} = useUser()
