@@ -11,7 +11,7 @@ import MenuOptionsPost from "../MenuOptionsPost";
 import { useMemo, useState } from "react";
 import ModalComments from "../comments/ModalComments";
 
-function PostCard({post, user}) {
+function PostCard({post, user, modalPost, setModalPost, setPostEditing}) {
   const [modal, setModal] = useState(false)
   const { content, user:{id, name, paternalSurname, username, profilePictureUrl }, createdAt, images, comments, likes } = post
   const optionsMenuPost = useMemo(() => user?.id == id ? true : false, [])
@@ -37,13 +37,13 @@ function PostCard({post, user}) {
         <div className="flex items-center  gap-3 p-0">
           <div>
             {optionsMenuPost ? (
-              <MenuOptionsPost />
+              <MenuOptionsPost setModalPost={setModalPost} modalPost={modalPost} post={post} setPostEditing={setPostEditing} />
             ) : ""}
           </div>
           <XMarkIcon className="text-white w-7 font-bold" />
         </div>
       </div>
-      <div className="mt-2 px-4">
+      <div className="mt-4 px-4 mb-4">
         <p className="text-white">
           {content}
         </p>
