@@ -4,8 +4,13 @@ import { getAllUserPost } from "../api/PostAPI";
 import { getPhotosByUser } from "../api/UserAPI"
 import PostCard from "./post/PostCard"; 
 import CardImages from "./Images/CardImages";
+import { useState } from "react";
+import ModalEditingPost from "./post/ModalEditingPost";
 
 function MenuProfile({ user }) {
+    const [postEditing, setPostEditing] = useState([])
+    const [modalPost, setModalPost] = useState(false)
+
   const { data: UserPost } = useQuery({
     queryKey: ["UserPosts"],
     queryFn: getAllUserPost,
@@ -38,7 +43,7 @@ function MenuProfile({ user }) {
             <div className="flex items-center justify-center">
               <TabPanel key={"posts"} className="rounded-xl w-1/2">
                 {UserPost?.map((post) => (
-                  <PostCard key={post.id} user={user} post={post} />
+                  <PostCard key={post.id} user={user} post={post} modalPost={modalPost} setModalPost={setModalPost} setPostEditing={setPostEditing} />
                 ))}
               </TabPanel>
             </div>
@@ -54,6 +59,7 @@ function MenuProfile({ user }) {
           </TabPanels>
         </TabGroup>
       </div>
+      <ModalEditingPost modalPost={modalPost} setModalPost={setModalPost} postEditing={postEditing} setPostEditing={setPostEditing} />
     </div>
   );
 }

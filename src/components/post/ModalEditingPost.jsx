@@ -1,28 +1,20 @@
+import { useState, Fragment, useEffect, useRef } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  FaceSmileIcon,
-  PhotoIcon,
-  XCircleIcon,
-} from "@heroicons/react/24/outline";
-import React, { useState, Fragment, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import { FaceSmileIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { deleteImageByPostId, updatePostUser } from "../../api/PostAPI";
 import PostImagesEditing from "../Images/PostImagesEditing";
+import { toast } from "react-toastify";
 
-function ModalEditingPost({
-  modalPost,
-  setModalPost,
-  postEditing,
-  setPostEditing,
-}) {
+function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing }) {
+  const [preview, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+
   const defaultValues = {
     content: postEditing?.content || "",
   };
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({ defaultValues });
+  const { register, handleSubmit, formState: { errors }, reset, } = useForm({ defaultValues });
 
   useEffect(() => {
     reset(defaultValues);
@@ -34,8 +26,54 @@ function ModalEditingPost({
     setPostEditing([]);
   };
 
-  const handleSubmitUpdatePost = (data) => {
-    console.log(data);
+  const mutationDelete = useMutation({
+    mutationFn: deleteImageByPostId,
+    onSuccess: (data) => {
+      toast.success("Imagen eliminada con éxito");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleClickDeleteImage = (imageId) => {
+    const formData = {
+      imageId: imageId,
+      postId: postEditing?.id,
+    };
+    mutationDelete.mutate(formData);
+  };
+
+  const mutationUpdate = useMutation({
+    mutationFn: ({ postId, formData }) => updatePostUser(postId, formData),
+    onSuccess: (data) => {
+      toast.success("Post actualizado con éxito");
+    },
+    onError: (error) => {
+      console.log("Error:", error);
+    },
+  });
+
+  const manejarArchivo = (e) => {
+    const archivo = e.target.files[0];
+    if (archivo) {
+      setPreview(URL.createObjectURL(archivo));
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmitUpdatePost = (formData) => {
+    const data = new FormData();
+    if (file) data.append("file", file);
+    data.append(
+      "content",
+      new Blob([JSON.stringify(formData)], { type: "application/json" })
+    );
+    mutationUpdate.mutateAsync({ postId: postEditing?.id, formData: data });
+    setModalPost(false);
+    reset([]);
+    setPostEditing([]);
+    setPreview(null);
   };
 
   return (
@@ -98,19 +136,40 @@ function ModalEditingPost({
                           })}
                         />
                         <div className="flex justify-between">
-                          <button type="button">
-                            <PhotoIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
-                          </button>
+                          <div className="w-8">
+                            <label htmlFor="fileInput">
+                              <PhotoIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />
+                            </label>
+                            <input
+                              type="file"
+                              id="fileInput"
+                              className="hidden"
+                              onChange={manejarArchivo}
+                            />
+                          </div>
                           <button type="button">
                             <FaceSmileIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
                           </button>
                         </div>
                       </div>
-                      {postEditing?.images
-                        ? postEditing?.images.map((item) => (
-                            <PostImagesEditing item={item} key={item.id} />
+                      <div className="grid grid-cols-3 gap-2">
+                        {postEditing?.images
+                          ? postEditing?.images.map((item) => (
+                            <PostImagesEditing
+                              item={item}
+                              key={item.id}
+                              handleClickDeleteImage={handleClickDeleteImage}
+                            />
                           ))
-                        : ""}
+                          : ""}
+                        <div className="w-auto h-auto">
+                          {preview ? (
+                            <img src={preview} alt="perfil" className="w-full h-full object-cover rounded-lg" />
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
                       <div className="mt-5">
                         <input
                           type="submit"

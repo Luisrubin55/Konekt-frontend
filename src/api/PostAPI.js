@@ -19,7 +19,6 @@ export async function createPostWithImage(formData) {
         return data
     } catch (error) {
         console.log(error);
-        
          if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message)
         }
@@ -52,10 +51,14 @@ export async function getAllUserPost(){
 }
 
 
-export async function updatePostUser(formData) {
+export async function updatePostUser(postId, formData) {
+    
     try {
-        const url = "/post/createPostImage"
-        const { data } = await api.post(url, formData)
+        const url = "http://localhost:8080/api/post/"+postId;
+        formData.delete("postId")
+        const { data } = await api.patch(url, formData)
+        console.log(data);
+        
         return data
     } catch (error) {
         console.log(error);
@@ -79,4 +82,19 @@ export async function deltePostById(postId) {
         }
     }
 }
+
+export async function deleteImageByPostId(formData) {
+    try {
+        const url = `/post/${formData.postId}/image/${formData.imageId}`
+        const { data } = await api.delete(url)
+        return data
+    } catch (error) {
+        console.log(error);
+        
+         if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message)
+        }
+    }
+}
+
 

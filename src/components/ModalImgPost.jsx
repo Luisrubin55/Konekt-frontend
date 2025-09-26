@@ -14,6 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useMutation } from "@tanstack/react-query";
 import { createPostWithImage } from "../api/PostAPI";
+import { toast } from "react-toastify";
 
 function ModalImgPost({ modal, setModal, user }) {
   const [preview, setPreview] = useState(null);
@@ -34,7 +35,9 @@ function ModalImgPost({ modal, setModal, user }) {
 
   const mutation = useMutation({
     mutationFn: createPostWithImage,
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+      toast.success("Publicación creada con éxito");
+    },
     onError: (error) => {
       console.log(error);
     },

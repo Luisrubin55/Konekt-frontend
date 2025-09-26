@@ -1,7 +1,5 @@
 import {
-  ChatBubbleBottomCenterIcon,
   ChatBubbleOvalLeftIcon,
-  EllipsisHorizontalIcon,
   HeartIcon,
   ShareIcon,
   XMarkIcon,
@@ -10,11 +8,13 @@ import { formatDate } from "../../utils/utils";
 import MenuOptionsPost from "../MenuOptionsPost";
 import { useMemo, useState } from "react";
 import ModalComments from "../comments/ModalComments";
+import CarruselPostImages from "../Images/CarruselPostImages";
 
-function PostCard({post, user, modalPost, setModalPost, setPostEditing}) {
+function PostCard({ post, user, modalPost, setModalPost, setPostEditing }) {
   const [modal, setModal] = useState(false)
-  const { content, user:{id, name, paternalSurname, username, profilePictureUrl }, createdAt, images, comments, likes } = post
+  const { content, user: { id, name, paternalSurname, username, profilePictureUrl }, createdAt, images, comments, likes } = post
   const optionsMenuPost = useMemo(() => user?.id == id ? true : false, [])
+
   return (
     <div className=" bg-gray-950 rounded-xl mt-10">
       <div className="flex justify-between px-3 pt-2">
@@ -49,18 +49,14 @@ function PostCard({post, user, modalPost, setModalPost, setPostEditing}) {
         </p>
       </div>
       <div className="mt-3">
-        {images ? 
-        images.map(item => (
-          <img src={item.urlImage} alt="imagen post" className="w-full" key={item.id} />
-        ))
-        : ''}
+        <CarruselPostImages images={images} />
       </div>
       <div className="flex justify-around mt-3 p-2">
         <button className="flex items-center gap-2 hover:bg-red-600 p-2 rounded-2xl ">
           <HeartIcon className="text-white w-7" />
           <p className="text-white text-sm font-semibold">{likes.length}</p>
         </button>
-        <button className="flex items-center gap-2 hover:bg-sky-600 rounded-4xl p-2" onClick={() =>setModal(!modal)}>
+        <button className="flex items-center gap-2 hover:bg-sky-600 rounded-4xl p-2" onClick={() => setModal(!modal)}>
           <ChatBubbleOvalLeftIcon className="text-white w-7" />
           <p className="text-white text-sm font-semibold">{comments.length}</p>
         </button>
@@ -69,7 +65,7 @@ function PostCard({post, user, modalPost, setModalPost, setPostEditing}) {
           <p className="text-white text-sm font-semibold">3</p>
         </button>
       </div>
-      <ModalComments 
+      <ModalComments
         modal={modal}
         setModal={setModal}
         post={post}

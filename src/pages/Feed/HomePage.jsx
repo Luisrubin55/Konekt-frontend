@@ -23,7 +23,7 @@ function HomePage() {
     <div className="flex gap-10 w-5xl">
       <div className="w-2xl">
         <CreatePost />
-        <div className="mt-5">
+        <div className="mt-5 grid-cols-1">
           {posts?.map((post) => (
             <PostCard key={post.id} post={post} user={data} modalPost={modalPost} setModalPost={setModalPost} setPostEditing={setPostEditing} />
           ))}
