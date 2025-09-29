@@ -1,6 +1,6 @@
 import {
   ChatBubbleOvalLeftIcon,
-  HeartIcon,
+  HandThumbUpIcon,
   ShareIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
@@ -9,6 +9,7 @@ import MenuOptionsPost from "../MenuOptionsPost";
 import { useMemo, useState } from "react";
 import ModalComments from "../comments/ModalComments";
 import CarruselPostImages from "../Images/CarruselPostImages";
+import ModalReactionsPost from "../reactions/ModalReactionsPost";
 
 function PostCard({ post, user, modalPost, setModalPost, setPostEditing }) {
   const [modal, setModal] = useState(false)
@@ -52,15 +53,21 @@ function PostCard({ post, user, modalPost, setModalPost, setPostEditing }) {
         <CarruselPostImages images={images} />
       </div>
       <div className="flex justify-around mt-3 p-2">
-        <button className="flex items-center gap-2 hover:bg-red-600 p-2 rounded-2xl ">
-          <HeartIcon className="text-white w-7" />
-          <p className="text-white text-sm font-semibold">{likes.length}</p>
-        </button>
-        <button className="flex items-center gap-2 hover:bg-sky-600 rounded-4xl p-2" onClick={() => setModal(!modal)}>
+        <div className="relative group flex items-center gap-1">
+          <button type="button" className="flex items-center gap-2 hover:bg-red-600 p-2 rounded-2xl ">
+            <HandThumbUpIcon className="text-white w-7" />
+            <p className="text-white text-sm font-semibold">{likes.length}</p>
+          </button>
+          <div className="absolute w-max -top-12 left-3/4 -translate-x-1/2 bg-gray-900/90 rounded-xl shadow-lg p-2 hidden group-hover:flex scale-95 group-hover:scale-100 transition-transform duration-150 z-40">
+            <ModalReactionsPost />
+          </div>
+        </div>
+
+        <button type="button" className="flex items-center gap-2 hover:bg-sky-600 rounded-4xl p-2" onClick={() => setModal(!modal)}>
           <ChatBubbleOvalLeftIcon className="text-white w-7" />
           <p className="text-white text-sm font-semibold">{comments.length}</p>
         </button>
-        <button className="flex items-center gap-2">
+        <button type="button" className="flex items-center gap-2">
           <ShareIcon className="text-white w-7" />
           <p className="text-white text-sm font-semibold">3</p>
         </button>

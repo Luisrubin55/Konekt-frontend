@@ -6,15 +6,17 @@ import { FaceSmileIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/outli
 import { deleteImageByPostId, updatePostUser } from "../../api/PostAPI";
 import PostImagesEditing from "../Images/PostImagesEditing";
 import { toast } from "react-toastify";
+import EmojisInput from "../reactions/EmojisInput";
 
 function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing }) {
+  const [showPicker, setShowPicker] = useState(false)
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
 
   const defaultValues = {
     content: postEditing?.content || "",
   };
-  const { register, handleSubmit, formState: { errors }, reset, } = useForm({ defaultValues });
+  const { register, handleSubmit, formState: { errors }, reset, watch, setValue } = useForm({ defaultValues });
 
   useEffect(() => {
     reset(defaultValues);
@@ -60,6 +62,16 @@ function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing
       setPreview(URL.createObjectURL(archivo));
       setFile(e.target.files[0]);
     }
+  };
+
+  const contentValue = watch("content");
+
+  const handleEmojiClick = (emojiData) => {
+    setValue("content", contentValue + emojiData.emoji, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setShowPicker(false);
   };
 
   const handleSubmitUpdatePost = (formData) => {
@@ -113,7 +125,7 @@ function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing
                       Editar Post
                     </h2>
                     <div className="text-end">
-                      <button onClick={handleCllckCloseModal} className="">
+                      <button onClick={handleCllckCloseModal} type="button">
                         <XCircleIcon className="w-8 text-white font-bold hover:text-sky-600" />
                       </button>
                     </div>
@@ -147,9 +159,14 @@ function ModalEditingPost({ modalPost, setModalPost, postEditing, setPostEditing
                               onChange={manejarArchivo}
                             />
                           </div>
-                          <button type="button">
-                            <FaceSmileIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
-                          </button>
+                          <div className="relative">
+                            <button onClick={() => setShowPicker(!showPicker)} type="button">
+                              <FaceSmileIcon className="w-7 text-white font-extrabold hover:text-gray-400" />
+                            </button>
+                            <div className="absolute top-80 right-0 z-50">
+                              <EmojisInput handleEmojiClick={handleEmojiClick} showPicker={showPicker} />
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
