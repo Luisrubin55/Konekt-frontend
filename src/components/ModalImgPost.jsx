@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import {
   Description,
   Dialog,
@@ -15,15 +15,24 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { createPostWithImage } from "../api/PostAPI";
 import { toast } from "react-toastify";
+import EmojisInput from "./reactions/EmojisInput";
 
 function ModalImgPost({ modal, setModal, user }) {
+  const [showPicker, setShowPicker] = useState(false)
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    setValue,
+    watch,
+    reset
+  } = useForm({
+    defaultValues: {
+      content: ""
+    }
+  });
 
   const manejarArchivo = (e) => {
     const archivo = e.target.files[0];
@@ -31,6 +40,16 @@ function ModalImgPost({ modal, setModal, user }) {
       setPreview(URL.createObjectURL(archivo));
       setFile(e.target.files[0]);
     }
+  };
+
+  const contentValue = watch("content");
+
+  const handleEmojiClick = (emojiData) => {
+    setValue("content", contentValue + emojiData.emoji, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setShowPicker(false);
   };
 
   const mutation = useMutation({
@@ -51,6 +70,9 @@ function ModalImgPost({ modal, setModal, user }) {
       new Blob([JSON.stringify(formData)], { type: "application/json" })
     );
     mutation.mutateAsync(data)
+    setModal(false);
+    setPreview(null);
+    reset({});
   };
 
   const closeModal = () => {
@@ -112,9 +134,12 @@ function ModalImgPost({ modal, setModal, user }) {
               </div>
               <div className=" flex justify-between items-center mt-5">
                 <div className="flex gap-2">
-                  <button className="w-8">
-                    <FaceSmileIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />
-                  </button>
+                  <div className="w-8">
+                    <button onClick={() => setShowPicker(!showPicker)} type="button">
+                      <FaceSmileIcon className="text-white hover:bg-sky-700 p-1 rounded-full w-8" />
+                    </button>
+                    <EmojisInput showPicker={showPicker} handleEmojiClick={handleEmojiClick}  />
+                  </div>
                   <div className="w-8">
                     <label htmlFor="fileInput">
                       <PhotoIcon className="text-white hover:bg-sky-700 p-1 rounded-full" />

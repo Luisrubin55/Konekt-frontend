@@ -9,19 +9,22 @@ import {
   createCommentByPostId,
   updateCommentById,
 } from "../../api/CommentsAPI";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import EmojisInput from "../reactions/EmojisInput";
 
 function CreateComment({ user, post, commentEditing, setCommentEditing }) {
+  const [showPicker, setShowPicker] = useState(false)
   const defaultValues = {
     content: commentEditing?.content || "",
   };
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch
   } = useForm({ defaultValues });
 
   useEffect(() => {
@@ -49,6 +52,16 @@ function CreateComment({ user, post, commentEditing, setCommentEditing }) {
       console.log(error);
     },
   });
+
+  const contentValue = watch("content");
+
+  const handleEmojiClick = (emojiData) => {
+    setValue("content", contentValue + emojiData.emoji, {
+      shouldValidate: true,
+      shouldDirty: true,
+    });
+    setShowPicker(false);
+  };
 
   const handleForm = (data) => {
     if (commentEditing.id) {
@@ -83,7 +96,7 @@ function CreateComment({ user, post, commentEditing, setCommentEditing }) {
       <div className="bg-gray-800 p-2 rounded-2xl w-full">
         <form className="flex flex-col" onSubmit={handleSubmit(handleForm)}>
           <div className="flex items-center justify-between">
-            <input
+            <textarea
               className="focus:outline-none bg-gray-800 p-3 rounded-2xl text-white w-full"
               type="text"
               {...register("content", {
@@ -103,9 +116,12 @@ function CreateComment({ user, post, commentEditing, setCommentEditing }) {
           </div>
           <div className="flex justify-between">
             <div className="flex gap-3">
-              <button type="button">
-                <FaceSmileIcon className="w-5 text-white font-extrabold" />
-              </button>
+              <div>
+                <button onClick={() => setShowPicker(!showPicker)} type="button">
+                  <FaceSmileIcon className="w-5 text-white font-extrabold" />
+                </button>
+                <EmojisInput showPicker={showPicker} handleEmojiClick={handleEmojiClick} />
+              </div>
               <button type="button">
                 <PhotoIcon className="w-5 text-white font-extrabold" />
               </button>
