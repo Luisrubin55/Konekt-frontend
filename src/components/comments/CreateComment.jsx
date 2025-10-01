@@ -36,7 +36,7 @@ function CreateComment({ user, post, commentEditing, setCommentEditing }) {
   const mutationCreate = useMutation({
     mutationFn: createCommentByPostId,
     onSuccess: (data) => {
-      toast.success("Comentario creado");
+      toast.success("Comentario creado",{position: "bottom-left" });
     },
     onError: (error) => {
       console.log(error);

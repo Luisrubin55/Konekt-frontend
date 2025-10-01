@@ -30,8 +30,6 @@ export async function getPhotosByUser() {
     try {
         const url = "/user/images-user"
         const {data}  = await api.get(url)
-        console.log(data);
-        
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
