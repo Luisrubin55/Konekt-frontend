@@ -1,11 +1,11 @@
 import React from 'react'
 
-function ModalReactionsPost() {
-    const reactions = ["LIKE", "HEART", "HAHA", "SAD", "ANGRY"]
+function ModalReactionsPost({handleClickReaction}) {
+    const reactions = ["LIKE", "LOVE", "HAHA", "SAD", "ANGRY"]
   return (
     <div className="flex gap-3 items-center justify-center">
       {reactions.map((reaction) => (
-        <button key={reaction} className="flex items-center justify-center w-10 h-10">
+        <button key={reaction} onClick={() => handleClickReaction(reaction)} className="flex items-center justify-center w-10 h-10">
           <img
             src={`/reactions/${reaction}.svg`}
             alt={reaction}

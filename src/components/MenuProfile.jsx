@@ -11,6 +11,9 @@ function MenuProfile({ user }) {
     const [postEditing, setPostEditing] = useState([])
     const [modalPost, setModalPost] = useState(false)
 
+    console.log(user);
+    
+
   const { data: UserPost } = useQuery({
     queryKey: ["UserPosts"],
     queryFn: getAllUserPost,

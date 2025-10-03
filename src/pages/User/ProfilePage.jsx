@@ -1,17 +1,24 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { Cog8ToothIcon, LinkIcon } from "@heroicons/react/24/outline";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import useUser from "../../hooks/useUser";
 import MenuProfile from "../../components/MenuProfile";
-import {updatePhotoProfile} from "../../api/UserAPI"
+import {getUserByUsername, updatePhotoProfile} from "../../api/UserAPI"
+import { useParams } from "react-router-dom";
 
 
 function ProfilePage() {
   const [preview, setPreview] = useState(null);
   const [file, setFile] = useState(null);
 
-  const { data } = useUser();
+  const {username} = useParams();
+
+  
+  const { data: user } = useQuery({
+        queryKey: ["reactionsPost", username],
+        queryFn: () => getUserByUsername(username),
+  });
+  
 
   const manejarArchivo = (e) => {
     const archivo = e.target.files[0];
@@ -52,8 +59,8 @@ function ProfilePage() {
               src={
                 preview
                   ? preview
-                  : data?.profilePictureUrl
-                  ? data?.profilePictureUrl
+                  : user?.profilePictureUrl
+                  ? user?.profilePictureUrl
                   : "/perfil.jpg"
               }
               alt="perfil"
@@ -87,9 +94,9 @@ function ProfilePage() {
         </div>
         <div className="flex flex-col gap-4">
           <h2 className="text-white text-5xl font-bold">
-            {data?.name + " " + data?.paternalSurname}
+            {user?.name + " " + user?.paternalSurname}
           </h2>
-          <h3 className="text-white text-3xl">{data?.username}</h3>
+          <h3 className="text-white text-3xl">{user?.username}</h3>
           <div className="flex gap-2 items-center">
             <button className="text-xl text-white bg-sky-600 p-2 font-bold rounded-xl hover:bg-sky-700">
               Editar perfil
@@ -106,7 +113,7 @@ function ProfilePage() {
       </div>
       <div className="mt-10 flex gap-5">
         <MenuProfile 
-          user={data}
+          user={user}
         />
       </div>
       
