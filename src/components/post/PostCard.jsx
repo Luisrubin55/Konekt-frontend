@@ -13,6 +13,7 @@ import ModalReactionsPost from "../reactions/ModalReactionsPost";
 import { useMutation } from "@tanstack/react-query";
 import { addUpdateReactionPost } from "../../api/Reactions";
 import ModalGetAllReactions from "../reactions/ModalGetAllReactions";
+import { Link } from "react-router-dom";
 
 function PostCard({ post, user, modalPost, setModalPost, setPostEditing }) {
   const [modal, setModal] = useState(false);
@@ -66,7 +67,7 @@ function PostCard({ post, user, modalPost, setModalPost, setPostEditing }) {
           </div>
           <div className="space-y-1">
             <div className="flex gap-3 justify-center items-center">
-              <p className="text-white">{name + " " + paternalSurname}</p>
+              <Link to={`/${username}`} className="text-white">{name + " " + paternalSurname}</Link>
               <p className="text-slate-400 text-xs">{formatDate(createdAt)}</p>
             </div>
             <p className="text-white text-xs">{username}</p>
