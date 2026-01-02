@@ -38,9 +38,9 @@ export async function getAllPost(){
     }
 }
 
-export async function getAllUserPost(){
+export async function getAllUserPost(username){
     try {
-        const url = "/post"
+        const url = "/post/"+username
         const { data } = await api.get(url)
         return data
     } catch (error) {

@@ -25,7 +25,7 @@ function NavBar() {
         </li>
         <li>
           <Link
-            to={"/"}
+            to={"/friends"}
             className="flex items-center gap-3 font-bold text-xl hover:bg-slate-700 p-1 rounded-2xl"
           >
             <UserGroupIcon className="w-10" />

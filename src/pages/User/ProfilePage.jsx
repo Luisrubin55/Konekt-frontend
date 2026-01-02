@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import MenuProfile from "../../components/MenuProfile";
 import {getUserByUsername, updatePhotoProfile} from "../../api/UserAPI"
 import { useParams } from "react-router-dom";
+import useUser from "../../hooks/useUser";
 
 
 function ProfilePage() {
@@ -12,10 +13,10 @@ function ProfilePage() {
   const [file, setFile] = useState(null);
 
   const {username} = useParams();
+  const { data:userAuthenticated } = useUser();
 
-  
   const { data: user } = useQuery({
-        queryKey: ["reactionsPost", username],
+        queryKey: ["profile", username],
         queryFn: () => getUserByUsername(username),
   });
   
@@ -99,7 +100,7 @@ function ProfilePage() {
           <h3 className="text-white text-3xl">{user?.username}</h3>
           <div className="flex gap-2 items-center">
             <button className="text-xl text-white bg-sky-600 p-2 font-bold rounded-xl hover:bg-sky-700">
-              Editar perfil
+              { userAuthenticated?.id == user?.id ? "Editar perfil" : "Agregar a amigos" }
             </button>
             <button className=" flex items-center text-xl text-white bg-red-600 p-2 font-bold rounded-xl hover:bg-red-700">
               <Cog8ToothIcon className="text-white w-6" />

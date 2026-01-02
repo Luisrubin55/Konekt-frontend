@@ -9,6 +9,7 @@ import AuthLayout from "./layout/AuthLayout";
 import ForgotPasswordPage from "./pages/Authentication/ForgotPasswordPage";
 import ProfileLayout from "./layout/ProfileLayout";
 import ChangePasswordPage from "./pages/Authentication/ChangePasswordPage";
+import FriendsPage from "./pages/Feed/FriendsPage";
 
 function RouterApp() {
   return (
@@ -19,6 +20,7 @@ function RouterApp() {
         </Route>
         <Route element={<FeedLayout />}>
           <Route path="/" element={<HomePage />} index />
+          <Route path="/friends" element={<FriendsPage />} />
         </Route>
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />

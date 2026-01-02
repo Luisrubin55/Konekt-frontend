@@ -2,26 +2,23 @@ import { useQuery } from "@tanstack/react-query";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { getAllUserPost } from "../api/PostAPI";
 import { getPhotosByUser } from "../api/UserAPI"
-import PostCard from "./post/PostCard"; 
+import PostCard from "./post/PostCard";
 import CardImages from "./Images/CardImages";
 import { useState } from "react";
 import ModalEditingPost from "./post/ModalEditingPost";
 
 function MenuProfile({ user }) {
-    const [postEditing, setPostEditing] = useState([])
-    const [modalPost, setModalPost] = useState(false)
-
-    console.log(user);
-    
-
+  const [postEditing, setPostEditing] = useState([])
+  const [modalPost, setModalPost] = useState(false)
+  
   const { data: UserPost } = useQuery({
-    queryKey: ["UserPosts"],
-    queryFn: getAllUserPost,
+    queryKey: ["UserPosts", user?.username],
+    queryFn: () => getAllUserPost(user?.username),
   });
 
   const { data: UserPhotos } = useQuery({
-    queryKey: ["UserPhotos"],
-    queryFn: getPhotosByUser,
+    queryKey: ["UserPhotos", user?.username],
+    queryFn: () => getPhotosByUser(user?.username),
   });
 
   return (
@@ -36,11 +33,25 @@ function MenuProfile({ user }) {
               <p>Publicaciones</p>
             </Tab>
             <Tab
+              key={"information"}
+              className="rounded-full px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-white/5 data-selected:bg-white/10 data-selected:data-hover:bg-white/10"
+            >
+              <p>Informacion</p>
+            </Tab>
+            <Tab
               key={"photos"}
               className="rounded-full px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-white/5 data-selected:bg-white/10 data-selected:data-hover:bg-white/10"
             >
               <p>Fotos</p>
             </Tab>
+
+            <Tab
+              key={"friends"}
+              className="rounded-full px-3 py-1 text-sm/6 font-semibold text-white focus:not-data-focus:outline-none data-focus:outline data-focus:outline-white data-hover:bg-white/5 data-selected:bg-white/10 data-selected:data-hover:bg-white/10"
+            >
+              <p>Amigos</p>
+            </Tab>
+
           </TabList>
           <TabPanels className="mt-3">
             <div className="flex items-center justify-center">
@@ -51,13 +62,27 @@ function MenuProfile({ user }) {
               </TabPanel>
             </div>
           </TabPanels>
-          <TabPanels 
-           className="mt-3"
+          <TabPanels
+            className="mt-3"
           >
-            <TabPanel  key={"photos"}>
+            <TabPanel key={"information"}>
+              
+            </TabPanel>
+          </TabPanels>
+          <TabPanels
+            className="mt-3"
+          >
+            <TabPanel key={"photos"}>
               <div className="grid grid-cols-4 gap-6">
-              {UserPhotos?.map(photo => (<CardImages  key={photo?.id} photo={photo} />))}
-            </div>
+                {UserPhotos?.map(photo => (<CardImages key={photo?.id} photo={photo} />))}
+              </div>
+            </TabPanel>
+          </TabPanels>
+          <TabPanels
+            className="mt-3"
+          >
+            <TabPanel key={"information"}>
+              
             </TabPanel>
           </TabPanels>
         </TabGroup>

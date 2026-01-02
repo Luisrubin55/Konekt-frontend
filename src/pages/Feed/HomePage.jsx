@@ -11,7 +11,6 @@ function HomePage() {
   const [postEditing, setPostEditing] = useState([])
   const [modalPost, setModalPost] = useState(false)
 
-
   const { data: posts } = useQuery({
     queryKey: ["posts"],
     queryFn: getAllPost,

@@ -4,8 +4,6 @@ export async function getUser() {
     try {
         const url = `/user`
         const { data } = await api.get(url)
-        console.log(data);
-        
         return data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -18,8 +16,6 @@ export async function getUserByUsername(username) {
     try {
         const url = `/user/${username}`
         const { data } = await api.get(url)
-        console.log(data);
-        
         return data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -32,8 +28,6 @@ export async function updatePhotoProfile(formData) {
     try {
         const url = "/user/update-photo-profile"
         const {data}  = await api.patch(url, formData)
-        console.log(data);
-        
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
@@ -42,9 +36,9 @@ export async function updatePhotoProfile(formData) {
     }
 }
 
-export async function getPhotosByUser() {
+export async function getPhotosByUser(username) {
     try {
-        const url = "/user/images-user"
+        const url = "/user/images-user/"+username
         const {data}  = await api.get(url)
         return data
     } catch (error) {
